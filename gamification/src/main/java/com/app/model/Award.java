@@ -3,9 +3,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-
-
-
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -23,9 +22,17 @@ public class Award{
     String type;
     String name;
     String photo;
-    LocalDate date;
-    Long cost;
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
-    User user;
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "award")
+    List<Transaction> transactions = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Award{" +
+                "id=" + id +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", photo='" + photo + '\'' +
+                ", transactions=" + transactions +
+                '}';
+    }
 }

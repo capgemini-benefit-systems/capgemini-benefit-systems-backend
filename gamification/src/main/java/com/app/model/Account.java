@@ -23,7 +23,14 @@ public class Account{
     @OneToOne(cascade = CascadeType.PERSIST, mappedBy = "account")
     User user;
 
-
-
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }
 

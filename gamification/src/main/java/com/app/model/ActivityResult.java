@@ -56,5 +56,13 @@ public class ActivityResult {
         return Objects.hash(activity, user);
     }
 
-
+    @Override
+    public String toString() {
+        return "ActivityResult{" +
+                "id=" + id +
+                ", activity=" + activity +
+                ", user=" + user +
+                ", dateOfReceipt=" + dateOfReceipt +
+                '}';
+    }
 }

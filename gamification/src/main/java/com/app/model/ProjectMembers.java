@@ -57,4 +57,13 @@ public class ProjectMembers {
     }
 
 
+    @Override
+    public String toString() {
+        return "ProjectMembers{" +
+                "id=" + id +
+                ", project=" + project +
+                ", user=" + user +
+                ", permissions=" + permissions +
+                '}';
+    }
 }
