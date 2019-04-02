@@ -14,9 +14,7 @@ public class ActivityResultId implements Serializable {
     @Column(name = "userId")
     private Long userId;
 
-    private ActivityResultId(){
-
-    }
+    private ActivityResultId(){}
 
     public ActivityResultId(Long activityId, Long userId){
         this.activityId=activityId;

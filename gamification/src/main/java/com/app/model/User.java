@@ -6,47 +6,28 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="User")
+@Table
 public class User{
-
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    Long id;
-    String email;
-    String name;
-    String surname;
+    @GeneratedValue
+    //@Column(name = "id", updatable = false, nullable = false)
+    //@Column(columnDefinition = "int default 100")
+    private Long id;
+    private String email;
+    private String name;
+    private String surname;
     @Enumerated(EnumType.STRING)
-    Role role;
-    Long pointsSum;
-    Long currentPoints;
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "accountId", unique = true)
-    Account account;
+    private Role role;
+    private Long pointsSum;
+    private Long currentPoints;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
-    List<Award> awards = new ArrayList<>();
-
-
+    private List<Award> awards = new ArrayList<>();
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
-    List<ActivityResult> activityResults = new ArrayList<>();
-
-    public Long pointsSum() {
-        return  pointsSum;
-    }
-
-    public Long id() {
-        return  id;
-    }
-    public void id(Long id) {
-        this.id=id;
-    }
-
-
+    private List<ActivityResult> activityResults = new ArrayList<>();
 }

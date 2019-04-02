@@ -6,8 +6,9 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+@SuppressWarnings("deprecation")
 @Configuration
-public class MyConfiguration {
+public class CorsConfiguration {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {

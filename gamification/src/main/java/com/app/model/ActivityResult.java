@@ -13,7 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="Activity_Result")
+@Table
 public class ActivityResult {
 
     @EmbeddedId

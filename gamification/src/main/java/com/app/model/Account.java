@@ -12,16 +12,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="Account")
+@Table
 public class Account{
-
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue
     Long id;
     String login;
     String password;
-    @OneToOne(cascade = CascadeType.PERSIST, mappedBy = "account")
-    User user;
+
 
 
 

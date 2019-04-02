@@ -14,11 +14,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="Award")
+@Table
 public class Award{
-
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue
     Long id;
     String type;
     String name;

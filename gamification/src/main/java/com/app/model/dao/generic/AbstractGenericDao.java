@@ -40,9 +40,7 @@ public abstract class AbstractGenericDao<T> implements GenericDao<T> {
     @Override
     public void delete(Long id) {
         if (entityManager != null && id != null){
-            System.out.println("USUWANIE " + id);
             /*T element = entityManager.find(eClass, id);
-            System.out.println(element.toString());
             entityManager.remove(element);*/
             Query query = entityManager.createQuery("DELETE FROM " + eClass.getCanonicalName() + " c WHERE c.id = :id");
             query.setParameter("id", id);

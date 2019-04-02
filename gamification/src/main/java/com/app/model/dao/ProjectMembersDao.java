@@ -1,8 +1,11 @@
 package com.app.model.dao;
 
+import com.app.model.Project;
 import com.app.model.ProjectMembers;
 import com.app.model.dao.generic.GenericDao;
 
-public interface ProjectMembersDao extends GenericDao<ProjectMembers> {
+import java.util.List;
 
+public interface ProjectMembersDao extends GenericDao<ProjectMembers> {
+    List<Project> getProjectsByUserId(Long id);
 }

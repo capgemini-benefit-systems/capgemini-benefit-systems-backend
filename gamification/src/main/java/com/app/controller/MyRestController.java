@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 
+/*
+* This is only example controller that helps creating others.
+* This is not a part of final project.
+* */
+
 @RestController
 @RequestMapping("/api/producer")
 public class MyRestController {

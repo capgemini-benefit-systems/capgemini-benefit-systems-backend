@@ -15,11 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="Activity")
+@Table
 public class Activity{
-
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue
     Long id;
     Long points;
     String type;

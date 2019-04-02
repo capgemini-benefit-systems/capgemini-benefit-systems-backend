@@ -11,13 +11,10 @@ public class ProjectMembersId implements Serializable {
 
     @Column(name="projectId")
     private Long projectId;
-
     @Column(name = "userId")
     private Long userId;
 
-    private ProjectMembersId(){
-
-    }
+    private ProjectMembersId(){}
 
     public ProjectMembersId(Long projectId, Long userId){
         this.projectId=projectId;

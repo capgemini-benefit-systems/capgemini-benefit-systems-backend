@@ -19,7 +19,7 @@ import java.util.List;
 public class Project{
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue
     Long id;
     String name;
     String description;

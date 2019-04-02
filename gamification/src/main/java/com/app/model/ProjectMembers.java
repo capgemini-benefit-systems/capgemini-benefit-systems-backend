@@ -55,6 +55,4 @@ public class ProjectMembers {
     public int hashCode() {
         return Objects.hash(project, user);
     }
-
-
 }
