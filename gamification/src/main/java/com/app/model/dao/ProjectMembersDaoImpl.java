@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public class ProjectMembersDaoImpl extends AbstractGenericDao<ProjectMembers> implements ProjectMembersDao  {
-    public List<Project> getProjectsByUserId(Long id) {
+    /*public List<Project> getProjectsByUserId(Long id) {
         List<Project> list = new ArrayList<>();
         if (getEntityManager() != null){
             Query query = getEntityManager().createQuery(
@@ -25,5 +25,5 @@ public class ProjectMembersDaoImpl extends AbstractGenericDao<ProjectMembers> im
             query.getResultList();
         }
         return list;
-    }
+    }*/
 }
