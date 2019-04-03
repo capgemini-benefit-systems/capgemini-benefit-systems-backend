@@ -36,5 +36,22 @@ public class Activity{
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "activity")
     List<ActivityResult> activityResults = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id=" + id +
+                ", points=" + points +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", photo='" + photo + '\'' +
+                ", startingDate=" + startingDate +
+                ", finishDate=" + finishDate +
+                ", maxUsers=" + maxUsers +
+                ", actualUsers=" + actualUsers +
+                ", project=" + project +
+                ", activityResults=" + activityResults +
+                '}';
+    }
 }
 

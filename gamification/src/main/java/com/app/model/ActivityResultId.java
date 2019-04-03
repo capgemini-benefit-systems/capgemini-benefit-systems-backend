@@ -46,4 +46,12 @@ public class ActivityResultId implements Serializable {
     public int hashCode() {
         return Objects.hash(activityId, userId);
     }
+
+    @Override
+    public String toString() {
+        return "ActivityResultId{" +
+                "activityId=" + activityId +
+                ", userId=" + userId +
+                '}';
+    }
 }

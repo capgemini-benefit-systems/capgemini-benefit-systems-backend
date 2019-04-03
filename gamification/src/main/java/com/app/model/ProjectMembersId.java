@@ -47,4 +47,11 @@ public class ProjectMembersId implements Serializable {
         return Objects.hash(projectId, userId);
     }
 
+    @Override
+    public String toString() {
+        return "ProjectMembersId{" +
+                "projectId=" + projectId +
+                ", userId=" + userId +
+                '}';
+    }
 }
