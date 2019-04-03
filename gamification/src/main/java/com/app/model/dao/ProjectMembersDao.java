@@ -7,5 +7,5 @@ import com.app.model.dao.generic.GenericDao;
 import java.util.List;
 
 public interface ProjectMembersDao extends GenericDao<ProjectMembers> {
-    //List<Project> getProjectsByUserId(Long id);
+    List<Project> getProjectsByUserId(Long id);
 }

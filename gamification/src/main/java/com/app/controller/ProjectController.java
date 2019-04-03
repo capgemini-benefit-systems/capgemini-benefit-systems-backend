@@ -68,50 +68,6 @@ public class ProjectController {
 //        projects.forEach(projectDao::insert);
     }
 
-    @RequestMapping(value = "/sid", method = RequestMethod.GET,
-            produces = MediaType.IMAGE_JPEG_VALUE)
-
-    public void getImage(HttpServletResponse response) throws IOException {
-
-        var imgFile = new ClassPathResource("image/kon.jpg");
-
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
-        StreamUtils.copy(imgFile.getInputStream(), response.getOutputStream());
-
-    }
-
-    @RequestMapping(value = "/sid", method = RequestMethod.GET,
-            produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage() throws IOException {
-
-        var imgFile = new ClassPathResource("image/kon.jpg");
-        byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-
-        System.out.println(ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(bytes));
-
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(bytes);
-    }
-
-
-
-
-        @RequestMapping(value = "/sid", method = RequestMethod.GET,
-                produces = MediaType.IMAGE_JPEG_VALUE)
-        public ResponseEntity<InputStreamResource> getImage() throws IOException {
-
-            var imgFile = new ClassPathResource("src/resources/image/kon.jpg");
-
-            return ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(new InputStreamResource(imgFile.getInputStream()));
-
     }*/
 //}
 
@@ -121,18 +77,21 @@ public class ProjectController {
 public class ProjectController {
 
     private final ProjectDao projectDao;
-    private final ActivityDao activityDao;
-    private final ProjectMembersDao projectMembersDao;
+    //private final ProjectMembersDao projectMembersDao;
     private final UserDao userDao;
-    private final AccountDao accountDao;
+    private ProjectMembersDaoImpl projectMembersDao;
 
     @Autowired
-    public ProjectController(ProjectDao projectDao, ActivityDao activityDao, ProjectMembersDao projectMembersDao, UserDao userDao, AccountDao accountDao) {
+    public ProjectController(ProjectDao projectDao, /*ProjectMembersDao projectMembersDao,*/ UserDao userDao,ProjectMembersDaoImpl projectMembersDao) {
         this.projectDao = projectDao;
-        this.activityDao = activityDao;
-        this.projectMembersDao = projectMembersDao;
+        //this.projectMembersDao = projectMembersDao;
         this.userDao = userDao;
-        this.accountDao = accountDao;
+        this.projectMembersDao = projectMembersDao;
+
+    }
+    @PostMapping("/add")
+    public void addProjectPost(Project project){
+        projectDao.insert(project);
     }
 
     @RequestMapping("/all")
@@ -140,6 +99,30 @@ public class ProjectController {
         return projectDao.findAll();
     }
 
+    @GetMapping("/user/{id}")
+    public List<Project> getProjectsByUserId(@PathVariable Long id){
+        return projectMembersDao.getProjectsByUserId(id);
+    }
+
+
+    @RequestMapping(value = "/photo", method = RequestMethod.GET,
+            produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> getImage() throws IOException {
+
+
+        var imgFile = new ClassPathResource("image/kon.jpg");
+
+        // tu trzeba chwycic ten path z bazy zamiast tego wyzej na sztywno
+
+        byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
+
+
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(bytes);
+    }
 
 
 
