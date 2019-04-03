@@ -77,14 +77,12 @@ public class ProjectController {
 public class ProjectController {
 
     private final ProjectDao projectDao;
-    //private final ProjectMembersDao projectMembersDao;
     private final UserDao userDao;
-    private ProjectMembersDaoImpl projectMembersDao;
+    private final ProjectMembersDaoImpl projectMembersDao;
 
     @Autowired
-    public ProjectController(ProjectDao projectDao, /*ProjectMembersDao projectMembersDao,*/ UserDao userDao,ProjectMembersDaoImpl projectMembersDao) {
+    public ProjectController(ProjectDao projectDao, UserDao userDao,ProjectMembersDaoImpl projectMembersDao) {
         this.projectDao = projectDao;
-        //this.projectMembersDao = projectMembersDao;
         this.userDao = userDao;
         this.projectMembersDao = projectMembersDao;
 
@@ -99,29 +97,9 @@ public class ProjectController {
         return projectDao.findAll();
     }
 
-    @GetMapping("/user/{id}")
-    public List<Project> getProjectsByUserId(@PathVariable Long id){
-        return projectMembersDao.getProjectsByUserId(id);
-    }
-
-
-    @RequestMapping(value = "/photo", method = RequestMethod.GET,
-            produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage() throws IOException {
-
-
-        var imgFile = new ClassPathResource("image/kon.jpg");
-
-        // tu trzeba chwycic ten path z bazy zamiast tego wyzej na sztywno
-
-        byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-
-
-
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(bytes);
+    @GetMapping("/{id}/photo")
+    public String getPhotoPathByProjectId(@PathVariable Long id){
+        return projectDao.getPhotoPathByProjectId(id);
     }
 
 

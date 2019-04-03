@@ -1,20 +1,19 @@
 package com.app.controller;
 
 import com.app.model.Account;
+import com.app.model.Project;
 import com.app.model.User;
 import com.app.model.dao.AccountDao;
+import com.app.model.dao.ProjectDao;
+import com.app.model.dao.ProjectMembersDao;
 import com.app.model.dao.UserDao;
 import com.app.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Null;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -22,11 +21,15 @@ public class UserController {
 
     private final AccountDao accountDao;
     private final UserDao userDao;
+    private final ProjectMembersDao projectMembersDao;
+    private final ProjectDao projectDao;
 
     @Autowired
-    public UserController(AccountDao accountDao, UserDao userDao) {
+    public UserController(AccountDao accountDao, UserDao userDao, ProjectMembersDao projectMembersDao, ProjectDao projectDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
+        this.projectMembersDao = projectMembersDao;
+        this.projectDao = projectDao;
     }
 
     @GetMapping("/addSamples")
@@ -102,5 +105,31 @@ public class UserController {
     @GetMapping("/{id}")
     public Account getUserById(@PathVariable Long id) {
         return accountDao.findById(id).orElseThrow(NullPointerException::new);
+    }
+
+    @GetMapping("/{id}/projects")
+    public List<Project> getProjectsByUserId(@PathVariable Long id){
+        return projectMembersDao.getProjectsByUserId(id);
+
+        //todo
+        // first we must connect user with project (in method below)
+    }
+
+    @PostMapping("/{userId}/addToProject/{projectId}")
+    public boolean addUserToProjectById(@PathVariable Long userId, @PathVariable Long projectId) throws NullPointerException {
+
+        /*todo
+           Adding to M2M table is getting one object of related entities, then adding new element (just on Java layer),
+           and finally updating element in DB through dao update method.
+
+           This would work if we hadn't have permissions field in entity.
+
+         */
+
+
+        User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
+        Project project = projectDao.findById(projectId).orElseThrow(NullPointerException::new);
+
+        return false;
     }
 }
