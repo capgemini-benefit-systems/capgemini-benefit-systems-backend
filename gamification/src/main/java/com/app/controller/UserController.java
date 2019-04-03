@@ -125,7 +125,7 @@ public class UserController {
            This would work if we hadn't have permissions field in entity.
 
          */
-
+        // elo
 
         User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
         Project project = projectDao.findById(projectId).orElseThrow(NullPointerException::new);
