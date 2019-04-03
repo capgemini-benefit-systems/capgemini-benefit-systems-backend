@@ -31,22 +31,22 @@ public class UserController {
 
     @GetMapping("/addSamples")
     public void add() {
-        User u1 = new User(null,null,"Michal","Banka", Role.EMPLOYEE,
-                10000L,100L,null,null);
+       User u1 = new User(null,null,"Michal","Banka", Role.EMPLOYEE,
+                10000L,100L,null,null,null);
         User u2 = new User(null,null,"Jan","Nowak", Role.EMPLOYEE,
-                4000L,100L,null,null);
+                4000L,100L,null,null,null);
         User u3 = new User(null,null,"Robert","Koza", Role.EMPLOYEE,
-                8000L,100L,null,null);
+                8000L,100L,null,null,null);
         User u4 = new User(null,null,"Jaroslaw","Kaczynski", Role.EMPLOYEE,
-                1444L,100L,null,null);
+                1444L,100L,null,null,null);
         User u5 = new User(null,null,"Mariusz","Pudzianowski", Role.EMPLOYEE,
-                6000L,100L,null,null);
+                6000L,100L,null,null,null);
         User u6 = new User(null,null,"Robert","Kubica", Role.EMPLOYEE,
-                5500L,100L,null,null);
+                5500L,100L,null,null,null);
         User u7 = new User(null,null,"Marian","Bulka", Role.EMPLOYEE,
-                9400L,100L,null,null);
+                9400L,100L,null,null,null);
         User u8 = new User(null,null,"Ola","Syr", Role.EMPLOYEE,
-                1600L,100L,null,null);
+                1600L,100L,null,null,null);
         List<User> users = Arrays.asList(u1,u2,u3,u4,u5,u6,u7,u8);
         users.forEach(userDao::insert);
     }
