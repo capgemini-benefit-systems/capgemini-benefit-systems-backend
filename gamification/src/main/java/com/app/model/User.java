@@ -6,28 +6,60 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
-@Table
+@Table(name="User")
 public class User{
+
     @Id
-    @GeneratedValue
-    //@Column(name = "id", updatable = false, nullable = false)
-    //@Column(columnDefinition = "int default 100")
-    private Long id;
-    private String email;
-    private String name;
-    private String surname;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    Long id;
+    String email;
+    String name;
+    String surname;
     @Enumerated(EnumType.STRING)
-    private Role role;
-    private Long pointsSum;
-    private Long currentPoints;
+    Role role;
+    Long pointsSum;
+    Long currentPoints;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "accountId", unique = true)
+    Account account;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
-    private List<Award> awards = new ArrayList<>();
+    List<Transaction> transactions = new ArrayList<>();
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
-    private List<ActivityResult> activityResults = new ArrayList<>();
+    List<ActivityResult> activityResults = new ArrayList<>();
+
+    public Long pointsSum() {
+        return  pointsSum;
+    }
+
+    public Long id() {
+        return  id;
+    }
+    public void id(Long id) {
+        this.id=id;
+    }
+
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", role=" + role +
+                ", pointsSum=" + pointsSum +
+                ", currentPoints=" + currentPoints +
+                ", account=" + account +
+                ", transactions=" + transactions +
+                ", activityResults=" + activityResults +
+                '}';
+    }
 }

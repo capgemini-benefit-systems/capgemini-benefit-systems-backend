@@ -27,6 +27,12 @@ public class ProjectController {
         this.projectDao = projectDao;
     }
 
+    @RequestMapping("/all")
+    public List<Project> findAll(){
+        return projectDao.findAll();
+    }
+
+
     @GetMapping("/user/{id}")
     public List<Project> getProjectsByUserId(@PathVariable Long id){
         return projectMembersDao.getProjectsByUserId(id);
