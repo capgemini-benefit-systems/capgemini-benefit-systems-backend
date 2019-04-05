@@ -101,27 +101,8 @@ public class ProjectController {
     public String getPhotoPathByProjectId(@PathVariable Long id){
         return projectDao.getPhotoPathByProjectId(id);
     }*/
+    
 
-
-    @RequestMapping(value = "/photo", method = RequestMethod.GET,
-            produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage() throws IOException {
-
-
-        var imgFile = new ClassPathResource("image/kon.jpg");
-
-        // tu trzeba chwycic ten path z bazy zamiast tego wyzej na sztywno
-
-        byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-
-
-
-        return ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(bytes);
-    }
-*/
     @RequestMapping(value = "/photo", method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage() throws IOException {
