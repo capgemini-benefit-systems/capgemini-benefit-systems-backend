@@ -19,6 +19,10 @@ import org.springframework.http.MediaType;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import sun.nio.cs.ISO_8859_2;
+import sun.nio.cs.US_ASCII;
+
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
 
 
@@ -40,15 +44,9 @@ public class ProjectController {
         return projectDao.findAll();
     }
 
-
     @GetMapping("/user/{id}")
     public List<Project> getProjectsByUserId(@PathVariable Long id){
         return projectMembersDao.getProjectsByUserId(id);
-    }
-
-    @PostMapping("/add")
-    public void addProjectPost(Project project){
-        projectDao.insert(project);
     }
 
     /*@GetMapping("/addSamples")
@@ -98,34 +96,17 @@ public class ProjectController {
         return projectDao.findAll();
     }
 
-   /* @GetMapping("/{id}/photo")
-    public String getPhotoPathByProjectId(@PathVariable Long id){
-        System.out.println(projectDao.getPhotoPathByProjectId(id));
-        return projectDao.getPhotoPathByProjectId(id);
-    }*/
-
-
     @RequestMapping(value = "/{id}/photo",  method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws IOException {
 
-
-        //var imgFile = new ClassPathResource("image/kon.jpg");
         var imgFile = new ClassPathResource(projectDao.getPhotoPathByProjectId(id));
-
-        // tu trzeba chwycic ten path z bazy zamiast tego wyzej na sztywno
-
         byte[] bytes = StreamUtils.copyToByteArray(imgFile.getInputStream());
-
-
-
         return ResponseEntity
                 .ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(bytes);
     }
-
-
 
 }
 

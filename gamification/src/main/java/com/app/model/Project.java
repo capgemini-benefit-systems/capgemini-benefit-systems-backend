@@ -1,5 +1,6 @@
 package com.app.model;
 
+import com.app.model.enums.Stage;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,17 +21,18 @@ public class Project{
 
     @Id
     @GeneratedValue
-    Long id;
-    String name;
-    String description;
-    String photo;
-    LocalDate startingDate;
-    LocalDate finishDate;
-    Long maxUsers;
-    Long actualUsers;
-    String stage;
+    private Long id;
+    private String name;
+    private String description;
+    private String photo;
+    private LocalDate startingDate;
+    private LocalDate finishDate;
+    private Long maxUsers;
+    private Long actualUsers;
+    @Enumerated(EnumType.STRING)
+    private Stage stage;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "project")
-    List<Activity> activities = new ArrayList<>();
+    private List<Activity> activities = new ArrayList<>();
 
 }
 

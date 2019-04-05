@@ -19,21 +19,21 @@ public class User{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    Long id;
-    String email;
-    String name;
-    String surname;
+    private Long id;
+    private String email;
+    private String name;
+    private String surname;
     @Enumerated(EnumType.STRING)
-    Role role;
-    Long pointsSum;
-    Long currentPoints;
+    private Role role;
+    private Long pointsSum;
+    private Long currentPoints;
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "accountId", unique = true)
-    Account account;
+    private Account account;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
-    List<Transaction> transactions = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
-    List<ActivityResult> activityResults = new ArrayList<>();
+    private List<ActivityResult> activityResults = new ArrayList<>();
 
     public Long pointsSum() {
         return  pointsSum;

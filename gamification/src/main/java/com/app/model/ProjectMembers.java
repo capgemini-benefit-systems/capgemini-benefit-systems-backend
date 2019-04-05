@@ -37,7 +37,7 @@ public class ProjectMembers {
 
     @Column(name="permissions")
     @Enumerated(EnumType.STRING)
-    Permissions permissions;
+    private Permissions permissions;
 
     @Override
     public boolean equals(Object o) {

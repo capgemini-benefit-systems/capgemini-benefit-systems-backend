@@ -17,14 +17,14 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    Long id;
-    LocalDate date;
-    Long cost;
+    private Long id;
+    private LocalDate date;
+    private Long cost;
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "awardId")
-    Award award;
+    private Award award;
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
-    User user;
+    private User user;
 
 }

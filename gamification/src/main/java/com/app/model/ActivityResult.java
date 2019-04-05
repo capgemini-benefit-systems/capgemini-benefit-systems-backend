@@ -19,15 +19,6 @@ public class ActivityResult {
     @EmbeddedId
     ActivityResultId id;
 
-    /*@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "activityId",insertable=false, updatable=false)
-    Activity activity;
-
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId", insertable=false, updatable=false)
-    User user;*/
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("activityId")
     private Activity activity;
@@ -37,7 +28,7 @@ public class ActivityResult {
     private User user;
 
     @Column(name="dateOfReceipt")
-    LocalDate dateOfReceipt;
+    private LocalDate dateOfReceipt;
 
     @Override
     public boolean equals(Object o) {

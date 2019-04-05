@@ -17,12 +17,12 @@ public class Award{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    Long id;
-    String type;
-    String name;
-    String photo;
+    private Long id;
+    private String type;
+    private String name;
+    private String photo;
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "award")
-    List<Transaction> transactions = new ArrayList<>();
+    private List<Transaction> transactions = new ArrayList<>();
 
     @Override
     public String toString() {
