@@ -29,6 +29,7 @@ public class Activity{
     LocalDate finishDate;
     Long maxUsers;
     Long actualUsers;
+
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "projectId")
     Project project;

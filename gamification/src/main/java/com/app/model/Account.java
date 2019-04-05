@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Builder
 @Table
 public class Account{
+
     @Id
     @GeneratedValue
     Long id;

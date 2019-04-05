@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import ch.qos.logback.core.CoreConstants;
 import com.app.model.Project;
 import com.app.model.ProjectMembers;
 import com.app.model.dao.*;
@@ -97,18 +98,20 @@ public class ProjectController {
         return projectDao.findAll();
     }
 
-    /*@GetMapping("/{id}/photo")
+   /* @GetMapping("/{id}/photo")
     public String getPhotoPathByProjectId(@PathVariable Long id){
+        System.out.println(projectDao.getPhotoPathByProjectId(id));
         return projectDao.getPhotoPathByProjectId(id);
     }*/
-    
 
-    @RequestMapping(value = "/photo", method = RequestMethod.GET,
+
+    @RequestMapping(value = "/{id}/photo",  method = RequestMethod.GET,
             produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getImage() throws IOException {
+    public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws IOException {
 
 
-        var imgFile = new ClassPathResource("image/kon.jpg");
+        //var imgFile = new ClassPathResource("image/kon.jpg");
+        var imgFile = new ClassPathResource(projectDao.getPhotoPathByProjectId(id));
 
         // tu trzeba chwycic ten path z bazy zamiast tego wyzej na sztywno
 
