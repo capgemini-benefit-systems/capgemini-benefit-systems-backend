@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,9 +18,5 @@ public class Account{
     private Long id;
     private String login;
     private String password;
-
-
-
-
 }
 

@@ -1,6 +1,5 @@
 package com.app.model;
 
-
 import com.app.model.enums.Permissions;
 import lombok.*;
 
@@ -11,9 +10,10 @@ import java.util.Objects;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Builder
-@Table(name="Project_Members")
+@Table
 public class ProjectMembers {
 
     @EmbeddedId
@@ -39,20 +39,4 @@ public class ProjectMembers {
     @Enumerated(EnumType.STRING)
     private Permissions permissions;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        ProjectMembers that = (ProjectMembers) o;
-        return Objects.equals(project, that.project) &&
-                Objects.equals(user, that.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(project, user);
-    }
 }

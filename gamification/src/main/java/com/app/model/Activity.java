@@ -7,8 +7,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,6 +15,7 @@ import java.util.List;
 @Builder
 @Table
 public class Activity{
+
     @Id
     @GeneratedValue
     private Long id;

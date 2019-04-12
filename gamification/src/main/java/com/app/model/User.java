@@ -6,8 +6,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,31 +21,21 @@ public class User{
     private String email;
     private String name;
     private String surname;
+
     @Enumerated(EnumType.STRING)
     private Role role;
+
     private Long pointsSum;
     private Long currentPoints;
+
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "accountId", unique = true)
     private Account account;
+
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private List<Transaction> transactions = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private List<ActivityResult> activityResults = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", role=" + role +
-                ", pointsSum=" + pointsSum +
-                ", currentPoints=" + currentPoints +
-                ", account=" + account +
-                ", transactions=" + transactions +
-                ", activityResults=" + activityResults +
-                '}';
-    }
 }
