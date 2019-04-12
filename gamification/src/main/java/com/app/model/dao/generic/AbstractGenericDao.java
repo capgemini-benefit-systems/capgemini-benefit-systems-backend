@@ -24,10 +24,11 @@ public abstract class AbstractGenericDao<T> implements GenericDao<T> {
     protected EntityManager getEntityManager(){ return entityManager; }
 
     @Override
-    public void insert(T t) {
+    public T insert(T t) {
         if (entityManager != null && t != null){
-            entityManager.merge(t);
+            return entityManager.merge(t);
         }
+        return t;
     }
 
     @Override

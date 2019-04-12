@@ -1,0 +1,25 @@
+{
+  "id": {},
+  "name": "sampleProjectName",
+  "description": "sampleProjectDecription",
+  "photo": "samplePhoto",
+  "startingDate": "2012-12-21",
+  "finishDate": "2012-12-21",
+  "maxUsers": 100,
+  "actualUsers": 64,
+  "stage": "RUNNING",
+  "activities": [
+    {
+      "id": {},
+      "points": 10,
+      "type": "sampleType",
+      "name": "sampleName",
+      "description": "sampleDescription",
+      "photo": "samplePhoto",
+      "startingDate": "2012-12-21",
+      "finishDate": "2012-12-21",
+      "maxUsers": 100,
+      "actualUsers": 64
+    }
+  ]
+}
