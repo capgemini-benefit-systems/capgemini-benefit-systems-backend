@@ -14,11 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(name="User")
+@Table
 public class User{
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     private String email;
     private String name;
@@ -34,18 +34,6 @@ public class User{
     private List<Transaction> transactions = new ArrayList<>();
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private List<ActivityResult> activityResults = new ArrayList<>();
-
-    public Long pointsSum() {
-        return  pointsSum;
-    }
-
-    public Long id() {
-        return  id;
-    }
-    public void id(Long id) {
-        this.id=id;
-    }
-
 
     @Override
     public String toString() {
