@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import com.app.model.Activity;
 import com.app.model.Project;
 import com.app.model.dao.*;
 import lombok.var;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
@@ -59,13 +62,21 @@ public class ProjectController {
                 .body(bytes);
     }
 
+    @GetMapping("/{id}")
+    public Project getProjectById(@PathVariable Long id) {
+        return projectDao.findById(id).orElseThrow(NullPointerException::new);
+    }
+
     private List<Project> createSampleProjects() {
+
         Project p1 = new Project(null, "Proj1", "Desc1", "image/kon.jpg",
                 null, null, null, null, null, null);
         Project p2 = new Project(null, "Proj2", "Desc2", "image/kon.jpg",
                 null, null, null, null, null, null);
         Project p3 = new Project(null, "Proj3", "Desc3", "image/kon.jpg",
                 null, null, null, null, null, null);
+
+
         return Arrays.asList(p1, p2, p3);
     }
 }
