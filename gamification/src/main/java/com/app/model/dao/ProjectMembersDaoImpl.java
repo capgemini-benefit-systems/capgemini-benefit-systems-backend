@@ -18,8 +18,8 @@ public class ProjectMembersDaoImpl extends AbstractGenericDao<ProjectMembers> im
             Query query = getEntityManager().createQuery(
                     "SELECT p FROM com.app.model.Project p " +
                             "JOIN " + geteClass().getCanonicalName() + " pm " +
-                            "ON pm.project.getId() = p.id " +
-                            "WHERE pm.user.getId() = :id"
+                            "ON pm.project.id = p.id " +
+                            "WHERE pm.user.id = :id"
             );
             query.setParameter("id", id);
             list=query.getResultList();
@@ -34,8 +34,8 @@ public class ProjectMembersDaoImpl extends AbstractGenericDao<ProjectMembers> im
             Query query = getEntityManager().createQuery(
                     "SELECT u FROM com.app.model.User u " +
                             "JOIN " + geteClass().getCanonicalName() + " pm " +
-                            "ON pm.userId = u.id " +
-                            "WHERE pm.projectId = :id"
+                            "ON pm.user.id = u.id " +
+                            "WHERE pm.project.id = :id"
             );
             query.setParameter("id", id);
             query.getResultList();

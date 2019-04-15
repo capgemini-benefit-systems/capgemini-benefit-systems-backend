@@ -43,7 +43,7 @@ public class ProjectController {
         return projectDao.findAll();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}/users")
     public List<User> getUsersByProjectId(@PathVariable Long id) {
         return projectMembersDao.getUsersByProjectId(id);
     }
