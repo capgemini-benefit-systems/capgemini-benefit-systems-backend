@@ -4,6 +4,7 @@ import com.app.model.enums.Permissions;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
@@ -14,18 +15,10 @@ import java.util.Objects;
 @Entity
 @Builder
 @Table
-public class ProjectMembers {
+public class ProjectMembers implements Serializable {
 
     @EmbeddedId
     ProjectMembersId id;
-
-    /*@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "projectId", insertable=false, updatable=false)
-    Project project;
-
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId", insertable=false, updatable=false)
-    User user;*/
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("projectId")
@@ -38,5 +31,6 @@ public class ProjectMembers {
     @Column(name="permissions")
     @Enumerated(EnumType.STRING)
     private Permissions permissions;
+
 
 }

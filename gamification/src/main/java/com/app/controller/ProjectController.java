@@ -2,6 +2,7 @@ package com.app.controller;
 
 import com.app.model.Activity;
 import com.app.model.Project;
+import com.app.model.User;
 import com.app.model.dao.*;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ProjectController {
 
     private ProjectDao projectDao;
+    private ProjectMembersDao projectMembersDao;
 
     @Autowired
-    public ProjectController(ProjectDao projectDao) {
+    public ProjectController(ProjectDao projectDao, ProjectMembersDao projectMembersDao) {
         this.projectDao = projectDao;
+        this.projectMembersDao=projectMembersDao;
     }
 
     @PostMapping("/add")
@@ -40,10 +43,10 @@ public class ProjectController {
         return projectDao.findAll();
     }
 
-    /*@GetMapping("/user/{id}")
-    public List<Project> getProjectsByUserId(@PathVariable Long id) {
-        return projectMembersDao.getProjectsByUserId(id);
-    }*/
+    @GetMapping("/user/{id}")
+    public List<User> getUsersByProjectId(@PathVariable Long id) {
+        return projectMembersDao.getUsersByProjectId(id);
+    }
 
     @GetMapping("/addSamples")
     public String addSampleProjects() {

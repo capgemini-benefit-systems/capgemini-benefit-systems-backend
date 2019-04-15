@@ -1,17 +1,17 @@
 package com.app.controller;
 
-import com.app.model.Account;
-import com.app.model.Project;
-import com.app.model.User;
+import com.app.model.*;
 import com.app.model.dao.AccountDao;
 import com.app.model.dao.ProjectDao;
 import com.app.model.dao.ProjectMembersDao;
 import com.app.model.dao.UserDao;
+import com.app.model.enums.Permissions;
 import com.app.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Null;
+import java.security.Permission;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,23 +68,20 @@ public class UserController {
         // first we must connect user with project (in method below)
     }
 
-    @PostMapping("/{userId}/addToProject/{projectId}")
-    public boolean addUserToProjectById(@PathVariable Long userId, @PathVariable Long projectId) throws NullPointerException {
-
-        /*todo
-           Adding to M2M table is getting one object of related entities, then adding new element (just on Java layer),
-           and finally updating element in DB through dao update method.
-
-           This would work if we hadn't have permissions field in entity.
-
-         */
-
+    @GetMapping("/{userId}/addToProject/{projectId}")
+    public String addUserToProjectById(@PathVariable Long userId, @PathVariable Long projectId) throws NullPointerException {
 
         User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
         Project project = projectDao.findById(projectId).orElseThrow(NullPointerException::new);
 
-        return false;
+        ProjectMembers projectMembers= new ProjectMembers(new ProjectMembersId(projectId,userId),project,user, Permissions.ADMINISTRATOR);
+
+        projectMembersDao.insert(projectMembers);
+
+        return "dodano";
     }
+
+
 
     private List<User> createSampleUsers() {
         User u1 = new User(null,null,"Michal","Banka", Role.EMPLOYEE,
