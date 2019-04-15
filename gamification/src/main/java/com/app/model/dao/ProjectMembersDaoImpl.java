@@ -18,11 +18,11 @@ public class ProjectMembersDaoImpl extends AbstractGenericDao<ProjectMembers> im
             Query query = getEntityManager().createQuery(
                     "SELECT p FROM com.app.model.Project p " +
                             "JOIN " + geteClass().getCanonicalName() + " pm " +
-                            "ON pm.projectId = p.id " +
-                            "WHERE pm.userId = :id"
+                            "ON pm.project.getId() = p.id " +
+                            "WHERE pm.user.getId() = :id"
             );
             query.setParameter("id", id);
-            query.getResultList();
+            list=query.getResultList();
         }
         return list;
     }

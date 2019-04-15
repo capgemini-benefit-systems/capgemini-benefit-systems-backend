@@ -62,6 +62,7 @@ public class UserController {
 
     @GetMapping("/{id}/projects")
     public List<Project> getProjectsByUserId(@PathVariable Long id){
+
         return projectMembersDao.getProjectsByUserId(id);
 
         //todo
