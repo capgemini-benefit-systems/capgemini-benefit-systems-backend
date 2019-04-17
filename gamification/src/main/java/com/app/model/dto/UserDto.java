@@ -28,8 +28,8 @@ public class UserDto {
     private Long accountId;
 
     /*todo*/
-    /*private Long transactionId;
-    private Long activityResultId;*/
+    // private Long transactionId;
+    // private Long activityResultId;
 
 
     public static UserDto getUserDtoByUser(User modelUser){
