@@ -110,5 +110,12 @@ public class ActivityController {
     public void addActivityResultPost(ActivityResult activityResult){
         activityResultDao.insert(activityResult);
     }
+
+    @GetMapping("/{id}/activityResult")
+            public ActivityResult getActivityResultByActivity (@PathVariable Long id){
+        return activityResultDao.getActivityResultByActivity(id);
+    }
+
+
 }
 

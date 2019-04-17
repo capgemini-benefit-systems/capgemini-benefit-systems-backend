@@ -14,14 +14,17 @@ public class ActivityResultDaoImpl extends AbstractGenericDao<ActivityResult> im
 
         ActivityResult activityResult =new ActivityResult();
 
-        /*if(getEntityManager()!=null){
-            Query query=getEntityManager().createQuery(){
-                "SELECT  "
-            };
+        if(getEntityManager()!=null){
+            Query query=getEntityManager().createQuery(
+                "SELECT ar FROM " + geteClass().getCanonicalName() +" ar "+
+                        "JOIN com.app.model.Activity a "+
+                        "ON ar.activity.id=a.id " +
+                        "WHERE ar.activity.id= :id"
+            );
             query.setParameter("id", id);
             activityResult =(ActivityResult) query.getSingleResult();
         }
-*/
+
         return activityResult;
     }
 }
