@@ -27,11 +27,6 @@ public class UserDto {
     private Long currentPoints;
     private Long accountId;
 
-    /*todo*/
-    // private Long transactionId;
-    // private Long activityResultId;
-
-
     public static UserDto getUserDtoByUser(User modelUser){
         return UserDto.builder()
                 .id(modelUser.getId())

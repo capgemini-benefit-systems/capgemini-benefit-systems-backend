@@ -16,10 +16,6 @@ public class AwardDto {
     private String name;
     private String photo;
 
-    /*todo*/
-    // private Long transactionId;
-
-
     public static AwardDto getAwardDtoByAward(Award modelAward){
         return AwardDto.builder()
                 .id(modelAward.getId())

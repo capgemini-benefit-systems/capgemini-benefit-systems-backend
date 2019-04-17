@@ -24,9 +24,6 @@ public class ProjectDto {
     private Long actualUsers;
     private String stage;
 
-    /*todo*/
-    // private Long activityId;
-
     public static ProjectDto getProjectDtoByProject(Project modelProject){
         return ProjectDto.builder()
                 .id(modelProject.getId())
