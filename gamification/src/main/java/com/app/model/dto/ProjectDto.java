@@ -49,7 +49,7 @@ public class ProjectDto {
                 .maxUsers(projectDto.getMaxUsers())
                 .actualUsers(projectDto.getActualUsers())
                 .stage(Stage.valueOf(projectDto.getStage()))
-                .activities(new ArrayList<>()/*todo*/)
+                .activities(new ArrayList<>())
                 .build();
     }
 

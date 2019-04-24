@@ -38,4 +38,7 @@ public class User{
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private List<ActivityResult> activityResults = new ArrayList<>();
 
+    public User(Long id) {
+        this.id = id;
+    }
 }

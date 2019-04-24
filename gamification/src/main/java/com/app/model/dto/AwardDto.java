@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,6 +33,7 @@ public class AwardDto {
                 .type(awardDto.getType())
                 .name(awardDto.getName())
                 .photo(awardDto.getPhoto())
+                .transactions(new ArrayList<>())
                 .build();
     }
 }
