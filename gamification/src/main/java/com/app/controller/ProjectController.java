@@ -4,6 +4,8 @@ import com.app.model.Activity;
 import com.app.model.Project;
 import com.app.model.User;
 import com.app.model.dao.*;
+import com.app.model.dto.ProjectDto;
+import com.app.model.dto.UserDto;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.stream.Collectors;
+
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.util.StreamUtils;
@@ -34,18 +38,27 @@ public class ProjectController {
     }
 
     @PostMapping("/add")
-    public Project addProject(Project project) {
-        return projectDao.insert(project);
+    public ProjectDto addProject(ProjectDto projectDto) {
+        Project project = ProjectDto.getProjectByProjectDto(projectDto);
+        return ProjectDto.getProjectDtoByProject(projectDao.insert(project));
     }
 
     @GetMapping("/all")
-    public List<Project> findAll() {
-        return projectDao.findAll();
+    public List<ProjectDto> findAll() {
+        List<Project> projects =  projectDao.findAll();
+        return projects
+                .stream()
+                .map(ProjectDto::getProjectDtoByProject)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}/users")
-    public List<User> getUsersByProjectId(@PathVariable Long id) {
-        return projectMembersDao.getUsersByProjectId(id);
+    public List<UserDto> getUsersByProjectId(@PathVariable Long id) {
+        List<User> users = projectMembersDao.getUsersByProjectId(id);
+        return users
+                .stream()
+                .map(UserDto::getUserDtoByUser)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/addSamples")
@@ -66,8 +79,9 @@ public class ProjectController {
     }
 
     @GetMapping("/{id}")
-    public Project getProjectById(@PathVariable Long id) {
-        return projectDao.findById(id).orElseThrow(NullPointerException::new);
+    public ProjectDto getProjectById(@PathVariable Long id) {
+        Project project = projectDao.findById(id).orElseThrow(NullPointerException::new);
+        return ProjectDto.getProjectDtoByProject(project);
     }
 
     private List<Project> createSampleProjects() {

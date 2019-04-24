@@ -3,6 +3,8 @@ package com.app.controller;
 import com.app.model.*;
 import com.app.model.dao.*;
 import com.app.model.Project;
+import com.app.model.dto.ActivityDto;
+import com.app.model.dto.ActivityResultDto;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -34,13 +37,18 @@ public class ActivityController {
     }
 
     @PostMapping("/add")
-    public void addActivityPost(Activity activity){
+    public void addActivityPost(ActivityDto activityDto){
+        Activity activity = ActivityDto.getActivityByActivityDto(activityDto);
         activityDao.insert(activity);
     }
 
     @RequestMapping("/all")
-    public List<Activity> findAll(){
-        return activityDao.findAll();
+    public List<ActivityDto> findAll(){
+        List<Activity> activities = activityDao.findAll();
+        return activities
+                .stream()
+                .map(ActivityDto::getActivityDtoByActivity)
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "/{id}/photo",  method = RequestMethod.GET,
@@ -56,8 +64,12 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}/activities")
-    public List<Activity> getActivitiesByProjectId(@PathVariable Long id){
-        return activityDao.getActivitiesByProjectId(id);
+    public List<ActivityDto> getActivitiesByProjectId(@PathVariable Long id){
+        List<Activity> activities = activityDao.getActivitiesByProjectId(id);
+        return activities
+                .stream()
+                .map(ActivityDto::getActivityDtoByActivity)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/addSamples")
@@ -68,11 +80,29 @@ public class ActivityController {
     }
 
 
+
+    @GetMapping("/addSamplesActivityResults")
+    public String addSampleActivityResults() {
+        List<ActivityResult> activityResults = createSampleActivityResults();
+        activityResults.forEach(activityResultDao::insert);
+        return "{\"message\": \"samples-added\"}";
+    }
+
+    @PostMapping("/addActivityResult")
+    public void addActivityResultPost(ActivityResultDto arDto){
+        ActivityResult ar = ActivityResultDto.activityResultDtoToActivityResult(arDto);
+        activityResultDao.insert(ar);
+    }
+
+    @GetMapping("/{id}/activityResult")
+    public ActivityResultDto getActivityResultByActivityId(@PathVariable Long id){
+        ActivityResult ar = activityResultDao.getActivityResultByActivity(id);
+        return ActivityResultDto.activityResultToActivityResultDto(ar);
+    }
+
     private List<Activity> createSampleActivities() {
         Project p1 = projectDao.findById(1l).orElseThrow(NullPointerException::new);
         Project p2 = projectDao.findById(2l).orElseThrow(NullPointerException::new);
-
-
 
         Activity a1 = new Activity(null, 100l, "wyklad", "Wyklad o Javie","Litwo ojczyzno moja", "image/kon.jpg",
                 null, null, 15l, 10l, p1,null);
@@ -81,14 +111,6 @@ public class ActivityController {
         Activity a3 = new Activity(null, 100l, "wyklad", "Wyklad o C#","Litwo ojczyzno moja", "image/kon.jpg",
                 null, null, 15l, 10l, p2,null);
         return Arrays.asList(a1, a2, a3);
-    }
-
-
-    @GetMapping("/addSamplesActivityResults")
-    public String addSampleActivityResults() {
-        List<ActivityResult> activityResults = createSampleActivityResults();
-        activityResults.forEach(activityResultDao::insert);
-        return "{\"message\": \"samples-added\"}";
     }
 
     private List<ActivityResult> createSampleActivityResults(){
@@ -105,17 +127,5 @@ public class ActivityController {
 
         return Arrays.asList(ar1,ar2);
     }
-
-    @PostMapping("/addActivityResult")
-    public void addActivityResultPost(ActivityResult activityResult){
-        activityResultDao.insert(activityResult);
-    }
-
-    @GetMapping("/{id}/activityResult")
-            public ActivityResult getActivityResultByActivity (@PathVariable Long id){
-        return activityResultDao.getActivityResultByActivity(id);
-    }
-
-
 }
 

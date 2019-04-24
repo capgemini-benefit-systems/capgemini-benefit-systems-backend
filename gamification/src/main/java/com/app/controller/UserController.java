@@ -5,6 +5,8 @@ import com.app.model.dao.AccountDao;
 import com.app.model.dao.ProjectDao;
 import com.app.model.dao.ProjectMembersDao;
 import com.app.model.dao.UserDao;
+import com.app.model.dto.ProjectDto;
+import com.app.model.dto.UserDto;
 import com.app.model.enums.Permissions;
 import com.app.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import javax.validation.constraints.Null;
 import java.security.Permission;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -40,46 +43,52 @@ public class UserController {
     }
 
     @GetMapping("/top/{limit}")
-    public List<User> getTop5Users(@PathVariable int limit) {
+    public List<UserDto> getTop5Users(@PathVariable int limit) {
         if (limit < 0) limit = 0;
-        return userDao.getTopUsersByPointsSum(limit);
+        List<User> users = userDao.getTopUsersByPointsSum(limit);
+        return users
+                .stream()
+                .map(UserDto::getUserDtoByUser)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userDao.findAll();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userDao.findAll();
+        return users
+                .stream()
+                .map(UserDto::getUserDtoByUser)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public UserDto getUserById(@PathVariable Long id) {
+        User user = userDao.findById(id).orElseThrow(NullPointerException::new);
+        return UserDto.getUserDtoByUser(user);
+    }
+
+    @GetMapping("/{id}/projects")
+    public List<ProjectDto> getProjectsByUserId(@PathVariable Long id){
+        List<Project> projects = projectMembersDao.getProjectsByUserId(id);
+        return projects
+                .stream()
+                .map(ProjectDto::getProjectDtoByProject)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{userId}/addToProject/{projectId}")
+    public String addUserToProjectById(@PathVariable Long userId, @PathVariable Long projectId) throws NullPointerException {
+        User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
+        Project project = projectDao.findById(projectId).orElseThrow(NullPointerException::new);
+        ProjectMembers projectMembers= new ProjectMembers(new ProjectMembersId(projectId,userId),project,user, Permissions.ADMINISTRATOR);
+        projectMembersDao.insert(projectMembers);
+
+        return "{\"message\": \"user added to project\"}";
     }
 
     @GetMapping("/tmp/all")
     public String getAllUsersHard() {
         return getMockedUsers();
-    }
-
-    @GetMapping("/{id}")
-    public Account getUserById(@PathVariable Long id) {
-        return accountDao.findById(id).orElseThrow(NullPointerException::new);
-    }
-
-    @GetMapping("/{id}/projects")
-    public List<Project> getProjectsByUserId(@PathVariable Long id){
-
-        return projectMembersDao.getProjectsByUserId(id);
-
-        //todo
-        // first we must connect user with project (in method below)
-    }
-
-    @GetMapping("/{userId}/addToProject/{projectId}")
-    public String addUserToProjectById(@PathVariable Long userId, @PathVariable Long projectId) throws NullPointerException {
-
-        User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
-        Project project = projectDao.findById(projectId).orElseThrow(NullPointerException::new);
-
-        ProjectMembers projectMembers= new ProjectMembers(new ProjectMembersId(projectId,userId),project,user, Permissions.ADMINISTRATOR);
-
-        projectMembersDao.insert(projectMembers);
-
-        return "dodano";
     }
 
 
