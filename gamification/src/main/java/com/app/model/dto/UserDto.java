@@ -33,10 +33,10 @@ public class UserDto {
                 .email(modelUser.getEmail())
                 .name(modelUser.getName())
                 .surname(modelUser.getSurname())
-                .role(modelUser.getRole().name())
+                .role(/*modelUser.getRole().name()*/null)
                 .pointsSum(modelUser.getPointsSum())
                 .currentPoints(modelUser.getCurrentPoints())
-                .accountId(modelUser.getAccount().getId())
+                .accountId(/*modelUser.getAccount().getId()*/null)
                 .build();
     }
 

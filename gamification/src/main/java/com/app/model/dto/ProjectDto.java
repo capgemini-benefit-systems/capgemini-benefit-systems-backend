@@ -34,7 +34,7 @@ public class ProjectDto {
                 .finishDate(modelProject.getFinishDate())
                 .maxUsers(modelProject.getMaxUsers())
                 .actualUsers(modelProject.getActualUsers())
-                .stage(modelProject.getStage().name())
+                .stage(/*modelProject.getStage().name()*/null)
                 .build();
     }
 
