@@ -21,7 +21,7 @@ public class AwardController {
 
     @Autowired
     public AwardController(AwardDao awardDao){
-        this.awardDao=awardDao
+        this.awardDao=awardDao;
     }
 
     @GetMapping("/all")
