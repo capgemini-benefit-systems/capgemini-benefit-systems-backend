@@ -1,8 +1,6 @@
 package com.app.controller;
 
-import com.app.model.Activity;
-import com.app.model.Project;
-import com.app.model.User;
+import com.app.model.*;
 import com.app.model.dao.*;
 import com.app.model.dto.ProjectDto;
 import com.app.model.dto.UserDto;
@@ -30,11 +28,13 @@ public class ProjectController {
 
     private ProjectDao projectDao;
     private ProjectMembersDao projectMembersDao;
+    private UserDao userDao;
 
     @Autowired
-    public ProjectController(ProjectDao projectDao, ProjectMembersDao projectMembersDao) {
+    public ProjectController(ProjectDao projectDao, ProjectMembersDao projectMembersDao, UserDao userDao) {
         this.projectDao = projectDao;
         this.projectMembersDao=projectMembersDao;
+        this.userDao=userDao;
     }
 
     @PostMapping("/add")
@@ -68,6 +68,13 @@ public class ProjectController {
         return "{\"message\": \"samples-added\"}";
     }
 
+    @GetMapping("/addSamplesProjectMembers")
+    public String addSampleProjectMembers() {
+        List<ProjectMembers> projectMembers = createSampleProjectMembers();
+        projectMembers.forEach(projectMembersDao::insert);
+        return "{\"message\": \"samples-added\"}";
+    }
+
     @GetMapping(value = "/{id}/photo", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws IOException {
         ClassPathResource imgFile = new ClassPathResource(projectDao.getPhotoPathByProjectId(id));
@@ -95,5 +102,18 @@ public class ProjectController {
 
 
         return Arrays.asList(p1, p2, p3);
+    }
+    private List<ProjectMembers> createSampleProjectMembers() {
+
+        Project p1 = projectDao.findById(30l).orElseThrow(NullPointerException::new);
+        User u1=userDao.findById(29l).orElseThrow(NullPointerException::new);
+
+        ProjectMembersId projectMembersId=new ProjectMembersId(p1.getId(),u1.getId());
+
+
+        ProjectMembers pm1 = new ProjectMembers(projectMembersId,p1,u1,null);
+
+
+        return Arrays.asList(pm1);
     }
 }

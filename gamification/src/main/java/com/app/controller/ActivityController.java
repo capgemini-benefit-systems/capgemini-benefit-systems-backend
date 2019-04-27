@@ -115,8 +115,8 @@ public class ActivityController {
 
     private List<ActivityResult> createSampleActivityResults(){
 
-        Activity a1 = activityDao.findById(19l).orElseThrow(NullPointerException::new);
-        Activity a2= activityDao.findById(21l).orElseThrow(NullPointerException::new);
+        Activity a1 = activityDao.findById(33l).orElseThrow(NullPointerException::new);
+        Activity a2= activityDao.findById(34l).orElseThrow(NullPointerException::new);
         User u1=userDao.findById(1l).orElseThrow(NullPointerException::new);
 
         ActivityResultId activityResultId1= new ActivityResultId(a1.getId(),u1.getId());
