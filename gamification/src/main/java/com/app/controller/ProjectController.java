@@ -38,7 +38,7 @@ public class ProjectController {
     }
 
     @PostMapping("/add")
-    public ProjectDto addProject(ProjectDto projectDto) {
+    public ProjectDto addProject(@RequestBody ProjectDto projectDto) {
         Project project = ProjectDto.getProjectByProjectDto(projectDto);
         return ProjectDto.getProjectDtoByProject(projectDao.insert(project));
     }
