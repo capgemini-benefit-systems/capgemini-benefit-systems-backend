@@ -37,10 +37,12 @@ public class ActivityController {
     }
 
     @PostMapping("/add")
-    public void addActivityPost(ActivityDto activityDto){
+    public ActivityDto addActivityPost(@RequestBody ActivityDto activityDto){
         Activity activity = ActivityDto.getActivityByActivityDto(activityDto);
-        activityDao.insert(activity);
+        return ActivityDto.getActivityDtoByActivity(activityDao.insert(activity));
     }
+
+ 
 
     @RequestMapping("/all")
     public List<ActivityDto> findAll(){
