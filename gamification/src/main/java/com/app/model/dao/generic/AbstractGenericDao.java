@@ -73,14 +73,11 @@ public abstract class AbstractGenericDao<T> implements GenericDao<T> {
     public Long count(){
         if (entityManager != null){
             Query query = entityManager.createQuery("SELECT COUNT(c.id) FROM " + eClass.getCanonicalName() + " c");
-
             List<Long> list = query.getResultList();
             if (list != null && !list.isEmpty())
             {
                 return list.get(0);
             }
-
-
         }
         return null;
     }
