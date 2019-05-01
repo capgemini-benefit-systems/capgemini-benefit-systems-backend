@@ -44,7 +44,7 @@ public class ActivityController {
 
  
 
-    @RequestMapping("/all")
+    @GetMapping("/all")
     public List<ActivityDto> findAll(){
         List<Activity> activities = activityDao.findAll();
         return activities
