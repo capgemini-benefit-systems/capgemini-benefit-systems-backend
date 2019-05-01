@@ -1,5 +1,6 @@
 package com.app.model.dto;
 
+import com.app.model.Account;
 import com.app.model.User;
 import com.app.model.dao.AccountDao;
 import com.app.model.dao.AccountDaoImpl;
@@ -33,15 +34,14 @@ public class UserDto {
                 .email(modelUser.getEmail())
                 .name(modelUser.getName())
                 .surname(modelUser.getSurname())
-                .role(/*modelUser.getRole().name()*/null)
+                .role(modelUser.getRole() == null ? null : modelUser.getRole().name())
                 .pointsSum(modelUser.getPointsSum())
                 .currentPoints(modelUser.getCurrentPoints())
-                .accountId(/*modelUser.getAccount().getId()*/null)
+                .accountId(modelUser.getAccount() == null ? null : modelUser.getAccount().getId())
                 .build();
     }
 
     public static User getUserByUserDto(UserDto userDto){
-        AccountDao accountDao=new AccountDaoImpl();
         return User.builder()
                 .id(userDto.getId())
                 .email(userDto.getEmail())
@@ -50,9 +50,9 @@ public class UserDto {
                 .role(Role.valueOf(userDto.getRole()))
                 .pointsSum(userDto.getPointsSum())
                 .currentPoints(userDto.getCurrentPoints())
-                .account(accountDao.findById(userDto.getAccountId()).orElseThrow(NullPointerException::new))
-                .transactions(new ArrayList<>()/*todo*/)
-                .activityResults(new ArrayList<>()/*todo*/)
+                .account(new Account(userDto.accountId))
+                .transactions(new ArrayList<>())
+                .activityResults(new ArrayList<>())
                 .build();
 
     }

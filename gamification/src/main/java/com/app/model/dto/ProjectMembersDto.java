@@ -23,9 +23,9 @@ public class ProjectMembersDto {
 
     public static ProjectMembersDto projectMembersToProjectMembersDto(ProjectMembers pm){
         return ProjectMembersDto.builder()
-                .permissions(pm.getPermissions().name())
-                .projectId(pm.getProject().getId())
-                .userId(pm.getUser().getId())
+                .permissions(pm.getPermissions() == null ? null : pm.getPermissions().name())
+                .projectId(pm.getProject() == null ? null : pm.getProject().getId())
+                .userId(pm.getUser() == null ? null : pm.getUser().getId())
                 .build();
     }
 

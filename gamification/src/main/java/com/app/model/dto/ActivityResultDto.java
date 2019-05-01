@@ -33,8 +33,8 @@ public class ActivityResultDto {
 
     public static ActivityResultDto activityResultToActivityResultDto(ActivityResult ar){
         return ActivityResultDto.builder()
-                .activityId(ar.getActivity().getId())
-                .userId(ar.getUser().getId())
+                .activityId(ar.getActivity() == null ? null : ar.getActivity().getId())
+                .userId(ar.getUser() == null ? null : ar.getUser().getId())
                 .dateOfReceipt(ar.getDateOfReceipt())
                 .build();
     }

@@ -29,8 +29,8 @@ public class TransactionDto {
                 .id(modelTransaction.getId())
                 .date(modelTransaction.getDate())
                 .cost(modelTransaction.getCost())
-                .awardId(modelTransaction.getAward().getId())
-                .userId(modelTransaction.getUser().getId())
+                .awardId(modelTransaction.getAward() == null ? null : modelTransaction.getAward().getId())
+                .userId(modelTransaction.getUser() == null ? null : modelTransaction.getUser().getId())
                 .build();
     }
 

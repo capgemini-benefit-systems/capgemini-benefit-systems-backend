@@ -44,7 +44,7 @@ public class ActivityDto {
                 .finishDate(modelActivity.getFinishDate())
                 .maxUsers(modelActivity.getMaxUsers())
                 .actualUsers(modelActivity.getActualUsers())
-                .projectId(modelActivity.getProject().getId())
+                .projectId(modelActivity.getProject() == null ? null : modelActivity.getProject().getId())
                 .build();
     }
 
@@ -62,7 +62,7 @@ public class ActivityDto {
                 .maxUsers(activityDto.getMaxUsers())
                 .actualUsers(activityDto.getActualUsers())
                 .project(projectDao.findById(activityDto.getProjectId()).orElseThrow(NullPointerException::new))
-                .activityResults(new ArrayList<>()/*todo*/)
+                .activityResults(new ArrayList<>())
                 .build();
 
 
