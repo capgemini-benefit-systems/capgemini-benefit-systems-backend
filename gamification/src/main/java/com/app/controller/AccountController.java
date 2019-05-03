@@ -54,4 +54,28 @@ public class AccountController {
         }
         return Collections.singletonMap("message", "login is already taken");
     }
+
+    @GetMapping("/addSamples")
+    public String addSampleAccounts() {
+        List<RegistrationDataDto> registrationDataDtos=new ArrayList<>();
+
+        RegistrationDataDto registrationDataDto1=new RegistrationDataDto("kon","mocnehaslo",
+                "uzytkownik@poczta.pl","Jan","Kowalski",Role.EMPLOYEE.toString());
+        RegistrationDataDto registrationDataDto2=new RegistrationDataDto("kot","stronghaslo",
+                "user@email.pl","Piotr","Nowak",Role.ADMINISTRATOR.toString());
+        RegistrationDataDto registrationDataDto3=new RegistrationDataDto("user","strongerhaslo",
+                "poczta@email.pl","Józef","Kowalski",Role.EMPLOYEE.toString());
+
+        registrationDataDtos.add(registrationDataDto1);
+        registrationDataDtos.add(registrationDataDto2);
+        registrationDataDtos.add(registrationDataDto3);
+
+        for(RegistrationDataDto registrationDataDto:registrationDataDtos){
+            register(registrationDataDto);
+        }
+        return "{\"message\": \"samples-added\"}";
+    }
+
+
+
 }
