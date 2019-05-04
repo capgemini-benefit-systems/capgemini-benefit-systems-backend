@@ -42,8 +42,6 @@ public class ActivityController {
         return ActivityDto.getActivityDtoByActivity(activityDao.insert(activity));
     }
 
- 
-
     @GetMapping("/all")
     public List<ActivityDto> findAll(){
         List<Activity> activities = activityDao.findAll();

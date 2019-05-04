@@ -26,12 +26,12 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody AccountDto accountDto){
+    public Map<String, String> login(@RequestBody AccountDto accountDto) {
         Long accountId = accountDao.getIdByLoginAndPassword(accountDto.getLogin(), accountDto.getPassword())
                 .orElse(-1L);
-        Map<String,String> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>();
 
-        if (accountId != -1L){
+        if (accountId != -1L) {
             response.put("message", "login and password correct");
         } else {
             response.put("message", "login and/or password incorrect");
@@ -41,41 +41,40 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody RegistrationDataDto data){
-        if (!accountDao.isLoginBusy(data.getLogin())){
+    public Map<String, String> register(@RequestBody RegistrationDataDto data) {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "login is already taken");
+        response.put("accountId", Long.toString(-1));
+
+        if (!accountDao.isLoginBusy(data.getLogin())) {
             Account account = new Account(0L, data.getLogin(), data.getPassword(), null);
             Long accountId = accountDao.insert(account).getId();
+            response.replace("accountId", accountId.toString());
 
             User user = new User(0L, data.getEmail(), data.getName(), data.getSurname(),
                     Role.valueOf(data.getRole()), 0L, 0L, new Account(accountId),
                     new ArrayList<>(), new ArrayList<>());
             userDao.insert(user);
-            return Collections.singletonMap("message", "successfully registered");
+            response.replace("message", "successfully registered");
         }
-        return Collections.singletonMap("message", "login is already taken");
+        return response;
     }
 
     @GetMapping("/addSamples")
-    public String addSampleAccounts() {
-        List<RegistrationDataDto> registrationDataDtos=new ArrayList<>();
+    public Map<String, String> addSampleAccounts() {
 
-        RegistrationDataDto registrationDataDto1=new RegistrationDataDto("kon","mocnehaslo",
-                "uzytkownik@poczta.pl","Jan","Kowalski",Role.EMPLOYEE.toString());
-        RegistrationDataDto registrationDataDto2=new RegistrationDataDto("kot","stronghaslo",
-                "user@email.pl","Piotr","Nowak",Role.ADMINISTRATOR.toString());
-        RegistrationDataDto registrationDataDto3=new RegistrationDataDto("user","strongerhaslo",
-                "poczta@email.pl","Józef","Kowalski",Role.EMPLOYEE.toString());
+        List<RegistrationDataDto> registrationData = Arrays.asList(
+        new RegistrationDataDto("admin", "admin",
+                "admin@admin.pl", "Jan", "Kowalski", Role.ADMINISTRATOR.toString()),
+        new RegistrationDataDto("employee", "employee",
+                "employee@employee.pl", "Piotr", "Nowak", Role.EMPLOYEE.toString()),
+        new RegistrationDataDto("adam", "malysz",
+                "poczta@email.pl", "Adam", "Malysz", Role.EMPLOYEE.toString())
+        );
 
-        registrationDataDtos.add(registrationDataDto1);
-        registrationDataDtos.add(registrationDataDto2);
-        registrationDataDtos.add(registrationDataDto3);
-
-        for(RegistrationDataDto registrationDataDto:registrationDataDtos){
-            register(registrationDataDto);
-        }
-        return "{\"message\": \"samples-added\"}";
+        registrationData.forEach(this::register);
+        return Collections.singletonMap("message", "samples added (if not already in db)");
     }
-
 
 
 }
