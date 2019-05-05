@@ -72,6 +72,8 @@ public class ActivityController {
                 .collect(Collectors.toList());
     }
 
+
+
     @GetMapping("/addSamples")
     public String addSampleActivities() {
         List<Activity> activities = createSampleActivities();

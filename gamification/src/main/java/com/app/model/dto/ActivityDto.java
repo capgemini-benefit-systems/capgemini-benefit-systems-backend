@@ -61,7 +61,8 @@ public class ActivityDto {
                 .finishDate(activityDto.getFinishDate())
                 .maxUsers(activityDto.getMaxUsers())
                 .actualUsers(activityDto.getActualUsers())
-                .project(projectDao.findById(activityDto.getProjectId()).orElseThrow(NullPointerException::new))
+                //.project(projectDao.findById(activityDto.getProjectId()).orElseThrow(NullPointerException::new))
+                .project(new Project(activityDto.projectId))
                 .activityResults(new ArrayList<>())
                 .build();
 

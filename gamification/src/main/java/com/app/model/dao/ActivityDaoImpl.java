@@ -24,7 +24,7 @@ public class ActivityDaoImpl  extends AbstractGenericDao<Activity> implements Ac
         return path;
     }
 
-   public List<Activity> getActivitiesByProjectId(Long id) {
+    public List<Activity> getActivitiesByProjectId(Long id) {
         List<Activity> list = new ArrayList<>();
         if (getEntityManager() != null){
             Query query = getEntityManager().createQuery(
