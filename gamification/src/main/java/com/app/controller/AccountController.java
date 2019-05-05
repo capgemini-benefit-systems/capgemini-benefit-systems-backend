@@ -9,6 +9,7 @@ import com.app.model.dto.RegistrationDataDto;
 import com.app.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.*;
 
@@ -27,12 +28,17 @@ public class AccountController {
 
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody AccountDto accountDto) {
-        Long accountId = accountDao.getIdByLoginAndPassword(accountDto.getLogin(), accountDto.getPassword())
-                .orElse(-1L);
+        Long accountId=accountDao.getIdByLogin(accountDto.getLogin()).orElse(-1L);
         Map<String, String> response = new HashMap<>();
 
         if (accountId != -1L) {
-            response.put("message", "login and password correct");
+            if(BCrypt.checkpw(accountDto.getPassword(),accountDao.getPasswordById(accountId))){
+                response.put("message", "login and password correct");
+            }
+            else{
+                response.put("message", "login and/or password incorrect");
+                accountId=-1L;
+            }
         } else {
             response.put("message", "login and/or password incorrect");
         }
@@ -47,7 +53,8 @@ public class AccountController {
         response.put("accountId", Long.toString(-1));
 
         if (!accountDao.isLoginBusy(data.getLogin())) {
-            Account account = new Account(0L, data.getLogin(), data.getPassword(), null);
+            String hashPassword=BCrypt.hashpw(data.getPassword(),BCrypt.gensalt(10));
+            Account account = new Account(0L, data.getLogin(), hashPassword, null);
             Long accountId = accountDao.insert(account).getId();
             response.replace("accountId", accountId.toString());
 
@@ -64,12 +71,12 @@ public class AccountController {
     public Map<String, String> addSampleAccounts() {
 
         List<RegistrationDataDto> registrationData = Arrays.asList(
-        new RegistrationDataDto("admin", "admin",
+        new RegistrationDataDto("admin1234", "admin",
                 "admin@admin.pl", "Jan", "Kowalski", Role.ADMINISTRATOR.toString()),
-        new RegistrationDataDto("employee", "employee",
+        new RegistrationDataDto("employee1234", "employee",
                 "employee@employee.pl", "Piotr", "Nowak", Role.EMPLOYEE.toString()),
-        new RegistrationDataDto("adam", "malysz",
-                "poczta@email.pl", "Adam", "Malysz", Role.EMPLOYEE.toString())
+        new RegistrationDataDto("adam1234", "employee",
+                "poczta@email.pl", "Adam", "employee", Role.EMPLOYEE.toString())
         );
 
         registrationData.forEach(this::register);

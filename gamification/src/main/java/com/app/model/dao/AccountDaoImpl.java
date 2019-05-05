@@ -28,6 +28,32 @@ public class AccountDaoImpl extends AbstractGenericDao<Account> implements Accou
         return Optional.empty();
     }
 
+    public Optional<Long> getIdByLogin(String login) {
+        if (!login.isEmpty() &&  getEntityManager() != null) {
+            Query query = getEntityManager()
+                    .createQuery("SELECT a.id FROM " + geteClass().getCanonicalName() + " a " +
+                            "WHERE a.login = :login");
+            query.setParameter("login", login);
+
+            List queryResult = query.setMaxResults(1).getResultList();
+            if (!queryResult.isEmpty()){
+                return Optional.of((Long)queryResult.get(0));
+            }
+        }
+        return Optional.empty();
+    }
+    public String getPasswordById(Long id) {
+        String path = "";
+        if (getEntityManager() != null) {
+            Query query = getEntityManager()
+                    .createQuery("SELECT a.password FROM " + geteClass().getCanonicalName() + " a " +
+                            "WHERE a.id = :id");
+            query.setParameter("id", id);
+             path = (String) query.getSingleResult();
+        }
+        return path;
+    }
+
     @Override
     public boolean isLoginBusy(String login) {
         if (login == null) return false;
