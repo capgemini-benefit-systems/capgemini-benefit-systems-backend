@@ -24,6 +24,7 @@ public class ActivityDaoImpl  extends AbstractGenericDao<Activity> implements Ac
         return path;
     }
 
+
     public List<Activity> getActivitiesByProjectId(Long id) {
         List<Activity> list = new ArrayList<>();
         if (getEntityManager() != null){
@@ -34,7 +35,7 @@ public class ActivityDaoImpl  extends AbstractGenericDao<Activity> implements Ac
                             "WHERE a.project = :id"
             );
             query.setParameter("id", id);
-            query.getResultList();
+            list=query.getResultList();
         }
         return list;
     }
