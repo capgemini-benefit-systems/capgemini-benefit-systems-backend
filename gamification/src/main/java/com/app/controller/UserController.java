@@ -1,10 +1,8 @@
 package com.app.controller;
 
 import com.app.model.*;
-import com.app.model.dao.AccountDao;
-import com.app.model.dao.ProjectDao;
-import com.app.model.dao.ProjectMembersDao;
-import com.app.model.dao.UserDao;
+import com.app.model.dao.*;
+import com.app.model.dto.ActivityDto;
 import com.app.model.dto.ProjectDto;
 import com.app.model.dto.UserDto;
 import com.app.model.enums.Permissions;
@@ -26,13 +24,15 @@ public class UserController {
     private final UserDao userDao;
     private final ProjectMembersDao projectMembersDao;
     private final ProjectDao projectDao;
+    private final ActivityResultDao activityResultDao;
 
     @Autowired
-    public UserController(AccountDao accountDao, UserDao userDao, ProjectMembersDao projectMembersDao, ProjectDao projectDao) {
+    public UserController(AccountDao accountDao, UserDao userDao, ProjectMembersDao projectMembersDao, ProjectDao projectDao, ActivityResultDao activityResultDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.projectMembersDao = projectMembersDao;
         this.projectDao = projectDao;
+        this.activityResultDao=activityResultDao;
     }
 
     @GetMapping("/addSamples")
@@ -73,6 +73,15 @@ public class UserController {
         return projects
                 .stream()
                 .map(ProjectDto::getProjectDtoByProject)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}/activities")
+    public List<ActivityDto> getActivitiesByUserId(@PathVariable Long id){
+        List<Activity> activities=activityResultDao.getActivitiesByUserId(id);
+        return activities
+                .stream()
+                .map(ActivityDto::getActivityDtoByActivity)
                 .collect(Collectors.toList());
     }
 
