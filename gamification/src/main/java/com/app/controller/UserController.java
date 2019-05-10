@@ -25,14 +25,17 @@ public class UserController {
     private final ProjectMembersDao projectMembersDao;
     private final ProjectDao projectDao;
     private final ActivityResultDao activityResultDao;
+    private final ActivityDao activityDao;
 
     @Autowired
-    public UserController(AccountDao accountDao, UserDao userDao, ProjectMembersDao projectMembersDao, ProjectDao projectDao, ActivityResultDao activityResultDao) {
+    public UserController(AccountDao accountDao, UserDao userDao, ProjectMembersDao projectMembersDao,
+                          ProjectDao projectDao, ActivityResultDao activityResultDao, ActivityDao activityDao) {
         this.accountDao = accountDao;
         this.userDao = userDao;
         this.projectMembersDao = projectMembersDao;
         this.projectDao = projectDao;
         this.activityResultDao=activityResultDao;
+        this.activityDao=activityDao;
     }
 
     @GetMapping("/addSamples")
@@ -94,6 +97,18 @@ public class UserController {
 
         return "{\"message\": \"user added to project\"}";
     }
+
+    @GetMapping("/{userId}/addToActivity/{activityId}")
+    public String addUserToActivityById(@PathVariable Long userId, @PathVariable Long activityId) throws NullPointerException {
+        User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
+        Activity activity = activityDao.findById(activityId).orElseThrow(NullPointerException::new);
+        ActivityResult activityResult= new ActivityResult(new ActivityResultId(activityId,userId),activity,user, null);
+        activityResultDao.insert(activityResult);
+
+        return "{\"message\": \"user added to activity\"}";
+    }
+
+
 
     @GetMapping("/tmp/all")
     public String getAllUsersHard() {
