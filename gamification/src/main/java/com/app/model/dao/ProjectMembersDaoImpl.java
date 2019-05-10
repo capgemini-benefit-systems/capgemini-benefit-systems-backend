@@ -38,7 +38,7 @@ public class ProjectMembersDaoImpl extends AbstractGenericDao<ProjectMembers> im
                             "WHERE pm.project.id = :id"
             );
             query.setParameter("id", id);
-            query.getResultList();
+            list=query.getResultList();
         }
         return list;
 
