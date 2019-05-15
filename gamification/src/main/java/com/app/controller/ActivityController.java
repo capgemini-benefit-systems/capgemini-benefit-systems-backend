@@ -5,6 +5,7 @@ import com.app.model.dao.*;
 import com.app.model.Project;
 import com.app.model.dto.ActivityDto;
 import com.app.model.dto.ActivityResultDto;
+import com.app.model.dto.UserDto;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -128,6 +129,15 @@ public class ActivityController {
         ActivityResult ar2=new ActivityResult(activityResultId2,a2,u1,null);
 
         return Arrays.asList(ar1,ar2);
+    }
+
+    @GetMapping("/{id}/users")
+    public List<UserDto> getUsersByActivityId(@PathVariable Long id) {
+        List<User> users=activityResultDao.getUsersByActivityId(id);
+        return users
+                .stream()
+                .map(UserDto::getUserDtoByUser)
+                .collect(Collectors.toList());
     }
 }
 

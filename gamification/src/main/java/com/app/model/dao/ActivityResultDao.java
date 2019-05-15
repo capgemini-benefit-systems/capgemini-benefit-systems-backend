@@ -11,5 +11,5 @@ public interface ActivityResultDao extends GenericDao<ActivityResult> {
 
    ActivityResult getActivityResultByActivity(Long id);
    List<Activity> getActivitiesByUserId(Long id);
-
+   List<User> getUsersByActivityId (Long id);
 }

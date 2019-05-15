@@ -48,4 +48,23 @@ public class ActivityResultDaoImpl extends AbstractGenericDao<ActivityResult> im
         }
         return list;
     }
+
+    @Override
+    public List<User> getUsersByActivityId(Long id){
+        List<User> list = new ArrayList<>();
+        if (getEntityManager() != null){
+            Query query = getEntityManager().createQuery(
+                    "SELECT u FROM com.app.model.User u " +
+                            "JOIN " + geteClass().getCanonicalName() + " ar " +
+                            "ON ar.user.id = u.id " +
+                            "WHERE ar.activity.id = :id"
+            );
+            query.setParameter("id", id);
+            list=query.getResultList();
+        }
+
+        return list;
+
+
+    }
 }
