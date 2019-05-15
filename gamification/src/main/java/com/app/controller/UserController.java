@@ -3,6 +3,7 @@ package com.app.controller;
 import com.app.model.*;
 import com.app.model.dao.*;
 import com.app.model.dto.ActivityDto;
+import com.app.model.dto.ActivityResultDto;
 import com.app.model.dto.ProjectDto;
 import com.app.model.dto.UserDto;
 import com.app.model.enums.Permissions;
@@ -87,7 +88,7 @@ public class UserController {
                 .map(ActivityDto::getActivityDtoByActivity)
                 .collect(Collectors.toList());
     }
-
+    
     @GetMapping("/{userId}/addToProject/{projectId}")
     public String addUserToProjectById(@PathVariable Long userId, @PathVariable Long projectId) throws NullPointerException {
         User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
