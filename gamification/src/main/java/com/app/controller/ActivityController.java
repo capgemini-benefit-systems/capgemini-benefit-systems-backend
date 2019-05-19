@@ -15,8 +15,8 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -30,21 +30,22 @@ public class ActivityController {
     private final ActivityResultDao activityResultDao;
 
     @Autowired
-    public ActivityController(ActivityDao activityDao, UserDao userDao, ProjectDao projectDao, ActivityResultDao activityResultDao) {
+    public ActivityController(ActivityDao activityDao, UserDao userDao, ProjectDao projectDao,
+                              ActivityResultDao activityResultDao) {
         this.activityDao = activityDao;
         this.userDao = userDao;
-        this.projectDao=projectDao;
-        this.activityResultDao=activityResultDao;
+        this.projectDao = projectDao;
+        this.activityResultDao = activityResultDao;
     }
 
     @PostMapping("/add")
-    public ActivityDto addActivityPost(@RequestBody ActivityDto activityDto){
+    public ActivityDto addActivityPost(@RequestBody ActivityDto activityDto) {
         Activity activity = ActivityDto.getActivityByActivityDto(activityDto);
         return ActivityDto.getActivityDtoByActivity(activityDao.insert(activity));
     }
 
     @GetMapping("/all")
-    public List<ActivityDto> findAll(){
+    public List<ActivityDto> findAll() {
         List<Activity> activities = activityDao.findAll();
         return activities
                 .stream()
@@ -52,8 +53,7 @@ public class ActivityController {
                 .collect(Collectors.toList());
     }
 
-    @RequestMapping(value = "/{id}/photo",  method = RequestMethod.GET,
-            produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = "/{id}/photo", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) throws IOException {
 
         var imgFile = new ClassPathResource(activityDao.getPhotoPathByActivityId(id));
@@ -65,7 +65,7 @@ public class ActivityController {
     }
 
     @GetMapping("/{id}/activities")
-    public List<ActivityDto> getActivitiesByProjectId(@PathVariable Long id){
+    public List<ActivityDto> getActivitiesByProjectId(@PathVariable Long id) {
         List<Activity> activities = activityDao.getActivitiesByProjectId(id);
         return activities
                 .stream()
@@ -74,70 +74,112 @@ public class ActivityController {
     }
 
 
-
     @GetMapping("/addSamples")
-    public String addSampleActivities() {
+    public Map<String, String> addSampleActivities() {
         List<Activity> activities = createSampleActivities();
-        activities.forEach(activityDao::insert);
-        return "{\"message\": \"samples-added\"}";
-    }
+        if (!activities.isEmpty()) {
+            activities.forEach(activityDao::insert);
+            return Collections.singletonMap("message", "samples added");
+        } else {
+            return Collections.singletonMap("message", "samples not added, Projects entity in DB is empty");
+        }
 
+    }
 
 
     @GetMapping("/addSamplesActivityResults")
-    public String addSampleActivityResults() {
+    public Map<String, String> addSampleActivityResults() {
+
         List<ActivityResult> activityResults = createSampleActivityResults();
-        activityResults.forEach(activityResultDao::insert);
-        return "{\"message\": \"samples-added\"}";
+        if (!activityResults.isEmpty()) {
+            activityResults.forEach(activityResultDao::insert);
+            return Collections.singletonMap("message", "samples added");
+        } else {
+            return Collections.singletonMap("message", "samples not added, Activities and/or Users entity in DB is empty");
+        }
+
     }
 
     @PostMapping("/addActivityResult")
-    public void addActivityResultPost(ActivityResultDto arDto){
+    public void addActivityResultPost(ActivityResultDto arDto) {
         ActivityResult ar = ActivityResultDto.activityResultDtoToActivityResult(arDto);
         activityResultDao.insert(ar);
     }
 
     @GetMapping("/{id}/activityResult")
-    public ActivityResultDto getActivityResultByActivityId(@PathVariable Long id){
+    public ActivityResultDto getActivityResultByActivityId(@PathVariable Long id) {
         ActivityResult ar = activityResultDao.getActivityResultByActivity(id);
         return ActivityResultDto.activityResultToActivityResultDto(ar);
     }
 
-    private List<Activity> createSampleActivities() {
-        Project p1 = projectDao.findById(1l).orElseThrow(NullPointerException::new);
-        Project p2 = projectDao.findById(2l).orElseThrow(NullPointerException::new);
-
-        Activity a1 = new Activity(null, 100l, "wyklad", "Wyklad o Javie","Litwo ojczyzno moja", "image/kon.jpg",
-                null, null, 15l, 10l, p1,null);
-        Activity a2 = new Activity(null, 100l, "wyklad", "Wyklad o Python","Litwo ojczyzno moja", "image/kon.jpg",
-                null, null, 15l, 10l, p1,null);
-        Activity a3 = new Activity(null, 100l, "wyklad", "Wyklad o C#","Litwo ojczyzno moja", "image/kon.jpg",
-                null, null, 15l, 10l, p2,null);
-        return Arrays.asList(a1, a2, a3);
-    }
-
-    private List<ActivityResult> createSampleActivityResults(){
-
-        Activity a1 = activityDao.findById(33l).orElseThrow(NullPointerException::new);
-        Activity a2= activityDao.findById(34l).orElseThrow(NullPointerException::new);
-        User u1=userDao.findById(1l).orElseThrow(NullPointerException::new);
-
-        ActivityResultId activityResultId1= new ActivityResultId(a1.getId(),u1.getId());
-        ActivityResultId activityResultId2= new ActivityResultId(a2.getId(),u1.getId());
-
-        ActivityResult ar1=new ActivityResult(activityResultId1,a1,u1, null);
-        ActivityResult ar2=new ActivityResult(activityResultId2,a2,u1,null);
-
-        return Arrays.asList(ar1,ar2);
-    }
-
     @GetMapping("/{id}/users")
     public List<UserDto> getUsersByActivityId(@PathVariable Long id) {
-        List<User> users=activityResultDao.getUsersByActivityId(id);
+        List<User> users = activityResultDao.getUsersByActivityId(id);
         return users
                 .stream()
                 .map(UserDto::getUserDtoByUser)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/user/{userId}/finished")
+    public List<ActivityDto> getFinishedActivitiesByUserId(@PathVariable Long userId) {
+        List<Activity> activities = activityDao.getFinishedActivitiesByUserId(userId, true);
+        return activities
+                .stream()
+                .map(ActivityDto::getActivityDtoByActivity)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/user/{userId}/notFinished")
+    public List<ActivityDto> getNotFinishedActivitiesByUserId(@PathVariable Long userId) {
+        List<Activity> activities = activityDao.getFinishedActivitiesByUserId(userId, false);
+        return activities
+                .stream()
+                .map(ActivityDto::getActivityDtoByActivity)
+                .collect(Collectors.toList());
+    }
+
+    private List<Activity> createSampleActivities() {
+        List<Project> projects = projectDao.findAll();
+        if (projects != null && !projects.isEmpty()) {
+            Random random = new Random();
+            Activity a1 = new Activity(null, 100L, "wyklad", "Wyklad o Javie",
+                    "Litwo ojczyzno moja", "image/kon.jpg", null, null,
+                    15L, 10L, projects.get(random.nextInt(projects.size())), null);
+            Activity a2 = new Activity(null, 100L, "wyklad", "Wyklad o Python",
+                    "Litwo ojczyzno moja", "image/kon.jpg", null, null,
+                    15L, 10L, projects.get(random.nextInt(projects.size())), null);
+            Activity a3 = new Activity(null, 100L, "wyklad", "Wyklad o C#",
+                    "Litwo ojczyzno moja", "image/kon.jpg", null, null,
+                    15L, 10L, projects.get(random.nextInt(projects.size())), null);
+            return Arrays.asList(a1, a2, a3);
+        }
+        return new ArrayList<>();
+
+    }
+
+    private List<ActivityResult> createSampleActivityResults() {
+
+        List<Activity> activities = activityDao.findAll();
+        List<User> users = userDao.findAll();
+        if (activities != null && !activities.isEmpty() && users != null && !users.isEmpty()) {
+            Random random = new Random();
+
+            Activity a2 = activities.get(random.nextInt(activities.size()));
+            User u2 = users.get(random.nextInt(users.size()));
+            ActivityResultId activityResultId2 = new ActivityResultId(a2.getId(), u2.getId());
+
+            Activity a1 = activities.get(random.nextInt(activities.size()));
+            User u1 = users.get(random.nextInt(users.size()));
+            ActivityResultId activityResultId1 = new ActivityResultId(a1.getId(), u1.getId());
+
+            ActivityResult ar1 = new ActivityResult(activityResultId1, a1, u1, LocalDate.now());
+            ActivityResult ar2 = new ActivityResult(activityResultId2, a2, u2, null);
+
+            return Arrays.asList(ar1, ar2);
+        }
+
+        return new ArrayList<>();
     }
 }
 

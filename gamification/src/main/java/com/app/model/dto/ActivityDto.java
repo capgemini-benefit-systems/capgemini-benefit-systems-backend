@@ -49,7 +49,6 @@ public class ActivityDto {
     }
 
     public static Activity getActivityByActivityDto(ActivityDto activityDto){
-        ProjectDao projectDao = new ProjectDaoImpl();
         return Activity.builder()
                 .id(activityDto.getId())
                 .points(activityDto.getPoints())

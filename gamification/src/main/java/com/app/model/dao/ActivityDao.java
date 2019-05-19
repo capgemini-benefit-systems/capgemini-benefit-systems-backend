@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface ActivityDao extends GenericDao<Activity> {
 
-    public String getPhotoPathByActivityId(Long id);
-    public List<Activity> getActivitiesByProjectId(Long id);
+    String getPhotoPathByActivityId(Long id);
+    List<Activity> getActivitiesByProjectId(Long id);
+    List<Activity> getFinishedActivitiesByUserId(Long id, boolean finished);
 
 }
