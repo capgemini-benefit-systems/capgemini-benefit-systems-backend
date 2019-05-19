@@ -71,11 +71,11 @@ public class AccountController {
     public Map<String, String> addSampleAccounts() {
 
         List<RegistrationDataDto> registrationData = Arrays.asList(
-        new RegistrationDataDto("admin1234", "admin",
+        new RegistrationDataDto("admin", BCrypt.hashpw("admin",BCrypt.gensalt(10)),
                 "admin@admin.pl", "Jan", "Kowalski", Role.ADMINISTRATOR.toString()),
-        new RegistrationDataDto("employee1234", "employee",
+        new RegistrationDataDto("employee", BCrypt.hashpw("employee",BCrypt.gensalt(10)),
                 "employee@employee.pl", "Piotr", "Nowak", Role.EMPLOYEE.toString()),
-        new RegistrationDataDto("adam1234", "employee",
+        new RegistrationDataDto("adam", BCrypt.hashpw("adam",BCrypt.gensalt(10)),
                 "poczta@email.pl", "Adam", "employee", Role.EMPLOYEE.toString())
         );
 
