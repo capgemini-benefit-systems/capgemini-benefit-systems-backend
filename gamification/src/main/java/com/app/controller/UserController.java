@@ -11,8 +11,10 @@ import com.app.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Path;
 import javax.validation.constraints.Null;
 import java.security.Permission;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -109,6 +111,22 @@ public class UserController {
         return "{\"message\": \"user added to activity\"}";
     }
 
+    @GetMapping("/{userId}/endActivity/{activityId}")
+    public void endActivityByUserAndActivityId(@PathVariable Long userId, @PathVariable Long activityId){
+        ActivityResult activityResult=activityResultDao.getActivityResultByUserAndActivity(userId,activityId);
+        activityResult.setDateOfReceipt(LocalDate.now());
+        activityResultDao.update(activityResult);
+    }
+
+
+    @GetMapping("/{userId}/addPoints/{activityId}")
+    public void addPointsToUserByUserAndActivityId(@PathVariable Long userId, @PathVariable Long activityId ) throws NullPointerException {
+        User user = userDao.findById(userId).orElseThrow(NullPointerException::new);
+        Activity activity = activityDao.findById(activityId).orElseThrow(NullPointerException::new);
+        user.setCurrentPoints(user.getCurrentPoints()+activity.getPoints());
+        user.setPointsSum(user.getPointsSum()+activity.getPoints());
+        userDao.update(user);
+    }
 
 
     @GetMapping("/tmp/all")
