@@ -20,6 +20,7 @@ public class Award{
     private String type;
     private String name;
     private String photo;
+    private Long cost;
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "award")
     private List<Transaction> transactions = new ArrayList<>();

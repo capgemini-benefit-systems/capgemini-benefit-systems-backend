@@ -17,6 +17,7 @@ public class AwardDto {
     private String type;
     private String name;
     private String photo;
+    private Long cost;
 
     public static AwardDto getAwardDtoByAward(Award modelAward){
         return AwardDto.builder()
@@ -24,6 +25,7 @@ public class AwardDto {
                 .type(modelAward.getType())
                 .name(modelAward.getName())
                 .photo(modelAward.getPhoto())
+                .cost(modelAward.getCost())
                 .build();
     }
 
@@ -33,6 +35,7 @@ public class AwardDto {
                 .type(awardDto.getType())
                 .name(awardDto.getName())
                 .photo(awardDto.getPhoto())
+                .cost(awardDto.getCost())
                 .transactions(new ArrayList<>())
                 .build();
     }
