@@ -46,13 +46,12 @@ public class TransactionController {
         return TransactionDto.getTransactionDtoByTransaction(transactionDao.insert(transaction));
     }
 
-    /*@GetMapping("/{userId}/buyAward/{awardId}")
+    @GetMapping("/{userId}/buyAward/{awardId}")
     public void buyAwardByUserAndAwardId(@PathVariable Long userId, @PathVariable Long awardId) throws NullPointerException{
         User user=userDao.findById(userId).orElseThrow(NullPointerException::new);
         Award award=awardDao.findById(awardId).orElseThrow(NullPointerException::new);
-        Transaction transaction=transactionDao.getTransactionByUserAndAwardId
-        user.setCurrentPoints(user.getCurrentPoints()-);
-    }*/
+        user.setCurrentPoints(user.getCurrentPoints()-award.getCost());
+    }
 
 
 }
