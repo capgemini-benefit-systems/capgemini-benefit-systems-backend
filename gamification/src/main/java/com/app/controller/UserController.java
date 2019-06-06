@@ -3,7 +3,6 @@ package com.app.controller;
 import com.app.model.*;
 import com.app.model.dao.*;
 import com.app.model.dto.ActivityDto;
-import com.app.model.dto.ActivityResultDto;
 import com.app.model.dto.ProjectDto;
 import com.app.model.dto.UserDto;
 import com.app.model.enums.Permissions;
@@ -11,19 +10,17 @@ import com.app.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Path;
-import javax.validation.constraints.Null;
-import java.security.Permission;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-    private final AccountDao accountDao;
     private final UserDao userDao;
     private final ProjectMembersDao projectMembersDao;
     private final ProjectDao projectDao;
@@ -31,9 +28,8 @@ public class UserController {
     private final ActivityDao activityDao;
 
     @Autowired
-    public UserController(AccountDao accountDao, UserDao userDao, ProjectMembersDao projectMembersDao,
+    public UserController(UserDao userDao, ProjectMembersDao projectMembersDao,
                           ProjectDao projectDao, ActivityResultDao activityResultDao, ActivityDao activityDao) {
-        this.accountDao = accountDao;
         this.userDao = userDao;
         this.projectMembersDao = projectMembersDao;
         this.projectDao = projectDao;
@@ -128,12 +124,19 @@ public class UserController {
         userDao.update(user);
     }
 
+    @GetMapping("/{id}/role")
+    public Map<String, Object> isAdmin(@PathVariable Long id){
+        Map<String, Object> response = new HashMap<>();
+        Role role = userDao.getRole(id);
+        response.put("id", id);
+        response.put("role", role);
+        return response;
+    }
 
     @GetMapping("/tmp/all")
     public String getAllUsersHard() {
         return getMockedUsers();
     }
-
 
 
     private List<User> createSampleUsers() {
