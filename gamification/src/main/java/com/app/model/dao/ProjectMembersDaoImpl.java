@@ -4,8 +4,10 @@ import com.app.model.Project;
 import com.app.model.ProjectMembers;
 import com.app.model.User;
 import com.app.model.dao.generic.AbstractGenericDao;
+import com.app.model.enums.Permissions;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +46,25 @@ public class ProjectMembersDaoImpl extends AbstractGenericDao<ProjectMembers> im
         return list;
 
 
+    }
+
+    @Override
+    public Permissions getPermissionsByUserIdAndProjectId(Long userId, Long projectId) {
+        Permissions permissions = null;
+        if(userId != null && userId >= 0 && projectId != null && projectId >= 0){
+            Query query = getEntityManager().createQuery(
+                    "SELECT pm.permissions " +
+                            "FROM " + geteClass().getCanonicalName() + " pm " +
+                            "WHERE pm.id.userId = :userId " +
+                            "AND pm.id.projectId = :projectId"
+            );
+            query.setParameter("userId", userId);
+            query.setParameter("projectId", projectId);
+            try {
+                permissions = (Permissions) query.getSingleResult();
+            }
+            catch (NoResultException ignored){}
+        }
+        return permissions;
     }
 }

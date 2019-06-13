@@ -4,15 +4,12 @@ import com.app.model.*;
 import com.app.model.dao.*;
 import com.app.model.dto.ProjectDto;
 import com.app.model.dto.UserDto;
-import lombok.var;
+import com.app.model.enums.Permissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
@@ -20,7 +17,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @RestController
 @RequestMapping("/api/project")
@@ -33,8 +29,8 @@ public class ProjectController {
     @Autowired
     public ProjectController(ProjectDao projectDao, ProjectMembersDao projectMembersDao, UserDao userDao) {
         this.projectDao = projectDao;
-        this.projectMembersDao=projectMembersDao;
-        this.userDao=userDao;
+        this.projectMembersDao = projectMembersDao;
+        this.userDao = userDao;
     }
 
     @PostMapping("/add")
@@ -45,7 +41,7 @@ public class ProjectController {
 
     @GetMapping("/all")
     public List<ProjectDto> findAll() {
-        List<Project> projects =  projectDao.findAll();
+        List<Project> projects = projectDao.findAll();
         return projects
                 .stream()
                 .map(ProjectDto::getProjectDtoByProject)
@@ -69,10 +65,13 @@ public class ProjectController {
     }
 
     @GetMapping("/addSamplesProjectMembers")
-    public String addSampleProjectMembers() {
-        List<ProjectMembers> projectMembers = createSampleProjectMembers();
-        projectMembers.forEach(projectMembersDao::insert);
-        return "{\"message\": \"samples-added\"}";
+    public Map<String, Object> addSampleProjectMembers() {
+        ProjectMembers pm1 = createSampleProjectMember(Permissions.ADMINISTRATOR)
+                .orElseThrow(NullPointerException::new);
+        ProjectMembers pm2 = createSampleProjectMember(Permissions.MEMBER)
+                .orElseThrow(NullPointerException::new);
+        Arrays.asList(pm1, pm2).forEach(projectMembersDao::insert);
+        return Collections.singletonMap("message", "sample project members added");
     }
 
     @GetMapping(value = "/{id}/photo", produces = MediaType.IMAGE_JPEG_VALUE)
@@ -91,6 +90,16 @@ public class ProjectController {
         return ProjectDto.getProjectDtoByProject(project);
     }
 
+    @GetMapping("/{projectId}/user/{userId}/permissions")
+    public Map<String, Object> getPermissionsByUserId(@PathVariable Long userId, @PathVariable Long projectId) {
+        Permissions permissions = projectMembersDao.getPermissionsByUserIdAndProjectId(userId, projectId);
+        Map<String, Object> response = new HashMap<>();
+        response.put("permissions", permissions);
+        if (permissions == null) response.put("message", "warning: permission is null, " +
+                "make sure that given userId and projectId were correct");
+        return response;
+    }
+
     private List<Project> createSampleProjects() {
 
         Project p1 = new Project(null, "Proj1", "Desc1", "image/kon.jpg",
@@ -100,20 +109,21 @@ public class ProjectController {
         Project p3 = new Project(null, "Proj3", "Desc3", "image/kon.jpg",
                 null, null, null, null, null, null);
 
-
         return Arrays.asList(p1, p2, p3);
     }
-    private List<ProjectMembers> createSampleProjectMembers() {
 
-        Project p1 = projectDao.findById(30l).orElseThrow(NullPointerException::new);
-        User u1=userDao.findById(29l).orElseThrow(NullPointerException::new);
+    private Optional<ProjectMembers> createSampleProjectMember(Permissions permissions) {
+        List<Project> projects = projectDao.findAll();
+        List<User> users = userDao.findAll();
+        if (projects != null && !projects.isEmpty() && users != null && !users.isEmpty()) {
+            Random random = new Random();
 
-        ProjectMembersId projectMembersId=new ProjectMembersId(p1.getId(),u1.getId());
+            Project p1 = projects.get(random.nextInt(projects.size()));
+            User u1 = users.get(random.nextInt(users.size()));
 
-
-        ProjectMembers pm1 = new ProjectMembers(projectMembersId,p1,u1,null);
-
-
-        return Arrays.asList(pm1);
+            ProjectMembersId projectMembersId = new ProjectMembersId(p1.getId(), u1.getId());
+            return Optional.of(new ProjectMembers(projectMembersId, p1, u1, permissions));
+        }
+        return Optional.empty();
     }
 }
